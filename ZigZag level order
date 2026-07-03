@@ -1,0 +1,62 @@
+import java.util.*;
+
+class Node {
+    int data;
+    Node left, right;
+    Node(int d) {
+        data = d;
+    }
+}
+public class Solution {
+    static Node build(int[] a) {
+        if (a.length == 0 || a[0] == -1) return null;
+        Queue<Node> q = new LinkedList<>();
+        Node root = new Node(a[0]);
+        q.add(root);
+        int i = 1;
+        while (!q.isEmpty() && i < a.length) {
+            Node t = q.poll();
+            if (i < a.length && a[i] != -1) {
+                t.left = new Node(a[i]);
+                q.add(t.left);
+            }
+            i++;
+            if (i < a.length && a[i] != -1) {
+                t.right = new Node(a[i]);
+                q.add(t.right);
+            }
+            i++;
+        }
+        return root;
+    }
+    static void zigzag(Node root) {
+        if (root == null) return;
+        Queue<Node> q = new LinkedList<>();
+        q.add(root);
+        boolean rev = false;
+        while (!q.isEmpty()) {
+            int n = q.size();
+            LinkedList<Integer> list = new LinkedList<>();
+            while (n-- > 0) {
+                Node cur = q.poll();
+                if (rev) list.addFirst(cur.data);
+                else list.addLast(cur.data);
+
+                if (cur.left != null) q.add(cur.left);
+                if (cur.right != null) q.add(cur.right);
+            }
+
+            for (int x : list) System.out.print(x + " ");
+            System.out.println();
+            rev = !rev;
+        }
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Integer> l = new ArrayList<>();
+        while (sc.hasNextInt()) l.add(sc.nextInt());
+        int[] a = new int[l.size()];
+        for (int i = 0; i < l.size(); i++) a[i] = l.get(i);
+        zigzag(build(a));
+    }
+}
